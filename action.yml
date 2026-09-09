@@ -1,0 +1,12 @@
+name: "dco-check"
+
+description: "Enforces Developer Certificate of Origin (DCO) compliance by validating sign-off on every commit in a pull request"
+
+inputs:
+  commits:
+    description: "JSON array of pull request commits to validate for DCO sign-off"
+    required: true
+
+runs:
+  using: "node24"
+  main: "dist/index.js"
