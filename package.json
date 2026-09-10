@@ -1,0 +1,20 @@
+{
+  "name": "step-security/tim-actions-dco",
+  "version": "1.1.0",
+  "description": "Enforces Developer Certificate of Origin (DCO) compliance by validating sign-off on every commit in a pull request",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "ncc build src/index.js -o dist"
+  },
+  "author": "step-security",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^2.0.3",
+    "@actions/github": "^8.0.1",
+    "axios": "^1.20.0",
+    "email-validator": "^2.0.4"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.45.0"
+  }
+}
