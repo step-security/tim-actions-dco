@@ -1,8 +1,13 @@
 [![StepSecurity Maintained Action](https://raw.githubusercontent.com/step-security/maintained-actions-assets/main/assets/maintained-action-banner.png)](https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions)
 
-# dco-check
+# step-security/tim-actions-dco
 
 Enforces Developer Certificate of Origin (DCO) compliance by validating sign-off on every commit in a pull request
+
+## Table of Contents
+
+- [Inputs](#inputs)
+- [Usage](#usage)
 
 ## Inputs
 
@@ -12,28 +17,32 @@ Enforces Developer Certificate of Origin (DCO) compliance by validating sign-off
 
 ## Usage
 
-Add `.github/workflows/dco.yml` with the following:
+Create a workflow file in your repository under `.github/workflows/` and paste the configuration below to start enforcing DCO sign-off on every pull request.
 
 ```yml
-name: DCO Compliance Check
+name: Enforce DCO
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
-  dco_check:
+  verify_dco:
     runs-on: ubuntu-latest
-    name: DCO Sign-off Check
+    name: Verify DCO Sign-off
+    permissions:
+      pull-requests: read
     steps:
-      - name: Fetch PR Commits
-        id: pr-commits
+      - name: Collect PR Commits
+        id: collect-commits
         uses: tim-actions/get-pr-commits@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Validate DCO Sign-off
+      - name: Check DCO Sign-off
         uses: step-security/tim-actions-dco@v1
         with:
-          commits: ${{ steps.pr-commits.outputs.commits }}
+          commits: ${{ steps.collect-commits.outputs.commits }}
 ```

@@ -48950,10 +48950,10 @@ function buildFailureReport(violations) {
 
 ${commitLines.join('\n')}
 
-  What should I do to fix it ?
+  How to resolve this ?
 
-  All proposed commits should include a Signed-off-by: <your-name> <your-email-address> line in their commit message.
-  This is most conveniently done by using --signoff (-s) when running git commit.`
+  Each commit must include a Signed-off-by: <your-name> <your-email-address> trailer in the commit message.
+  Run git commit --signoff (or -s) to have Git append it automatically.`
 }
 
 async function verifyDcoCompliance(commits, isRequiredFor, prURL) {
@@ -48996,15 +48996,17 @@ async function run() {
   try {
     await validateSubscription()
 
-    const { payload: { pull_request: pr } } = github.context
+    const { payload } = github.context
+    const pr = payload.pull_request
+    const prUrl = pr.html_url
+
     const commitsString = core.getInput('commits')
     const commits = JSON.parse(commitsString)
 
-    const dcoViolations = await verifyDcoCompliance(commits, () => true, pr.html_url)
-    if (dcoViolations.length === 0) return
-
-    const failureReport = buildFailureReport(dcoViolations)
-    core.setFailed(failureReport)
+    const dcoViolations = await verifyDcoCompliance(commits, () => true, prUrl)
+    if (dcoViolations.length > 0) {
+      core.setFailed(buildFailureReport(dcoViolations))
+    }
   } catch (error) {
     core.setFailed(error.message)
   }

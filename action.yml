@@ -1,4 +1,4 @@
-name: "dco-check"
+name: "tim-actions-dco"
 
 description: "Enforces Developer Certificate of Origin (DCO) compliance by validating sign-off on every commit in a pull request"
 
